@@ -1,5 +1,6 @@
 package com.scaler.productservicedecmwfeve.controllers;
 
+import com.scaler.productservicedecmwfeve.dtos.FakeStoreProductDto;
 import com.scaler.productservicedecmwfeve.models.Product;
 import com.scaler.productservicedecmwfeve.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,16 @@ public class ProductController {
     @GetMapping() // localhost:8080/products
     public List<Product> getAllProducts() {
 //        restTemplate.delete(null);
-        return new ArrayList<>();
+      List<Product> products=productService.getAllProducts();
+      List<Product> finalproducts= new ArrayList<>();
+//      for(int i=0;i< products.size();i++){
+//          finalproducts.add(products.get(i));
+//      }
+        for(Product p: products){
+            p.setTitle("Hello"+p.getTitle());
+            finalproducts.add(p);
+        }
+      return finalproducts;
     }
 
     @GetMapping("/{id}")
@@ -34,16 +44,14 @@ public class ProductController {
         return productService.getSingleProduct(id);
     }
 
-    @PostMapping()
+    @PostMapping("/")
     public Product addNewProduct(@RequestBody Product product) {
-        Product p = new Product();
-        p.setTitle("A new product");
-        return p;
+        return productService.addNewProduct(product);
     }
 
     @PatchMapping("/{id}")
     public Product updateProduct(@PathVariable("id") Long id, @RequestBody Product product) {
-        return new Product();
+        return productService.updateproduct(id,product);
     }
 
     @PutMapping("/{id}")
@@ -52,7 +60,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProduct(@PathVariable("id") Long id) {
-
+    public Product deleteProduct(@PathVariable("id") Long id) {
+        return productService.deleteProduct(id);
     }
 }
